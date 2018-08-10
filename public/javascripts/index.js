@@ -59,7 +59,7 @@
                 setTimeout(function() {
                     this.$chatHistoryList.append(templateResponse(contextResponse));
                     this.scrollToBottom();
-                }.bind(this), 500);
+                }.bind(this), 1000);
 
             }
         },
