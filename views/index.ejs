@@ -1,78 +1,116 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
-  <meta charset="UTF-8">
-  <title>Chat Widget</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
-  <link rel="stylesheet" href="/stylesheets/style.css">
+    <meta charset="UTF-8">
+    <title>Chat Widget</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
+    <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
 <div class="chat">
-  <div class="chat-header clearfix">
-    <img src="https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png" alt="avatar" />
+    <div class="chat-header clearfix">
+        <img src="https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png" alt="avatar" />
 
-    <div class="chat-about">
-      <div class="chat-with">ChatBot</div>
-    </div>
-  </div> <!-- end chat-header -->
+        <div class="chat-about">
+            <div class="chat-with">ChatBot</div>
+        </div>
+    </div> <!-- end chat-header -->
 
-  <div class="chat-history">
-    <ul>
+    <div class="chat-history">
+        <ul>
 
 
+        </ul>
+    </div> <!-- end chat-history -->
 
-    </ul>
-  </div> <!-- end chat-history -->
+    <div class="chat-message clearfix">
+        <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
+        <!--<form  action='/userupload' method="post" enctype="multipart/form-data" >-->
+        <!--<input type="file" class="multi"/>-->
+        <!--<input id="submitBtn" type='submit'/>-->
+        <!--</form>-->
+        <from>
+        <input type="file" id="userphoto" name="userphoto"/><br/><br/>
+        </from>
+        <button id = "sendPhoto">사진 보내</button>
 
-  <div class="chat-message clearfix">
-    <textarea name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3"></textarea>
 
-    <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-    <i class="fa fa-file-image-o"></i>
+        <!--<i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;-->
+        <!--<input type="file" class="multi"/>-->
 
-    <button>Send</button>
+        <!--원래 있던 이미지 업로드 아이콘-->
+        <!--<i class="fa fa-file-image-o"></i>-->
 
-  </div> <!-- end chat-message -->
+
+        <button>Send</button>
+
+    </div> <!-- end chat-message -->
 
 </div> <!-- end chat -->
 
 </div> <!-- end container -->
 
 <script id="message-template" type="text/x-handlebars-template">
-  <li class="clearfix">
-    <div class="message-data align-right">
-      <span class="message-data-time" >{{time}}, Today</span> &nbsp; &nbsp;
-      <span class="message-data-name" >Me</span> <i class="fa fa-circle me"></i>
-    </div>
-    <div class="message other-message float-right">
-      {{messageOutput}}
-    </div>
-  </li>
+    <li class="clearfix">
+        <div class="message-data align-right">
+            <span class="message-data-time" >{{time}}, Today</span> &nbsp; &nbsp;
+            <span class="message-data-name" >Me</span> <i class="fa fa-circle me"></i>
+        </div>
+        <div class="message other-message float-right">
+            {{messageOutput}}
+        </div>
+    </li>
 </script>
 
 <script id="message-response-template" type="text/x-handlebars-template">
-  <li>
-    <div class="message-data">
-      <span class="message-data-name"><i class="fa fa-circle online"></i> Bot</span>
-      <span class="message-data-time">{{time}}, Today</span>
-    </div>
-    <div class="message my-message">
-      {{response}}
-    </div>
-  </li>
+    <li>
+        <div class="message-data">
+            <span class="message-data-name"><i class="fa fa-circle online"></i> Bot</span>
+            <span class="message-data-time">{{time}}, Today</span>
+        </div>
+        <div class="message my-message">
+            {{response}}
+        </div>
+    </li>
 </script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js'></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js'></script>
 <script src="javascripts/index.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 <script>
     var socket = io('http://localhost:8080');
+    $(document).ready(function(){
+        $("#sendPhoto").click(function(){
+            geoFindMe(function (location) {
+                // console.log(location);
+                var form = $("#userphoto")[0];
+                var formData = new FormData(form);
+                formData.append("photo", $("#userphoto")[0].files[0]);
+                formData.append('location', location);
+                console.log($("#userphoto")[0].files[0])
+                // console.log(formData);
+                $.ajax({
+                    url: "http://localhost:8080/userupload",
+                    type : 'post',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function(result){
+                        console.log(result);
+                    },
+                    error: function (e) {
+                        alert(e);
+                    }
+                });
+            });
 
+        });
+    });
 </script>
-
 
 </body>
 
