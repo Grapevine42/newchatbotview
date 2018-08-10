@@ -1,5 +1,4 @@
 (function(){
-
     var chat = {
         messageToSend: '',
         // messageResponses: [
@@ -34,25 +33,33 @@
                     time: this.getCurrentTime()
                 };
 
-                // 이거 보내야지
-                console.log(this.messageToSend);
-
+                socket.emit('message', this.messageToSend.replace(/\n/g, ""));
                 this.$chatHistoryList.append(template(context));
                 this.scrollToBottom();
                 this.$textarea.val('');
 
                 // responses
                 var templateResponse = Handlebars.compile( $("#message-response-template").html());
+
+                function getData(callbackFunc) {
+                    socket.on('message', function (msg) {
+                        callbackFunc(msg);
+                    })
+                }
+
                 var contextResponse = {
-                    // response: this.getRandomItem(this.messageResponses),
-                    response: '123123',
+                    response: '',
                     time: this.getCurrentTime()
                 };
+
+                getData(function (abc) {
+                    contextResponse.response = abc;
+                });
 
                 setTimeout(function() {
                     this.$chatHistoryList.append(templateResponse(contextResponse));
                     this.scrollToBottom();
-                }.bind(this), 1500);
+                }.bind(this), 500);
 
             }
         },
