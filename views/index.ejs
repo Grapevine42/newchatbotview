@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
-  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Chat Widget</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- 합쳐지고 최소화된 최신 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <!-- 부가적인 테마 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
   <link rel="stylesheet" href="/stylesheets/style.css">
@@ -35,6 +45,22 @@
 
   </div> <!-- end chat-message -->
 
+  <div class="row">
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+      <div class="btn-group" role="group">
+        <button id="walBtn" type="button" class="btn btn-basic btn-lg" >
+          <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> 왈왈이
+        </button>
+      </div>
+      <div class="btn-group" role="group">
+        <button id="chatBtn" type="button" class="btn btn-basic btn-lg" >
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 채팅방
+        </button>      </div>
+      <div class="btn-group" role="group">
+        <button id="setBtn" type="button" class="btn btn-basic btn-lg">
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 세팅
+        </button>      </div>
+    </div>
 </div> <!-- end chat -->
 
 </div> <!-- end container -->
@@ -62,7 +88,7 @@
     </div>
   </li>
 </script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
 <script src='http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js'></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js'></script>
 <script src="javascripts/index.js"></script>
@@ -71,6 +97,30 @@
 <script>
     var socket = io('http://localhost:8080');
 
+</script>
+<script>
+    $(document).ready(function(){
+        $("#walBtn"). click(function () {
+            $.get("/walwal", function(data, status){
+                $(".chat-history").html(data);
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+        $("#chatBtn"). click(function () {
+            alert('hi');
+            $.get("/chat", function(data, status){
+                alert('hihihi')
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+        $("#setBtn"). click(function () {
+            $.get("/setting", function(data, status){
+                $(".chat-history").html(data);
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+
+    });
 </script>
 
 

@@ -1,0 +1,55 @@
+
+<h3>My Google Maps Demo</h3>
+<!--The div element for the map -->
+<div id="map" style=" height: 100%;"></div>
+<script>
+
+    var marker;
+
+    function initMap() {
+
+        if (navigator.geolocation) { // GPS를 지원하면
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 13,
+                    center: {lat: position.coords.latitude, lng: position.coords.longitude}
+                });
+
+                marker = new google.maps.Marker({
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                    position: {lat: position.coords.latitude, lng: position.coords.longitude}
+                });
+                marker.addListener('click', function() {
+                    $.get("/walwalDetail", function(data, status){
+                        $("#map").html(data);
+                        alert("Data: " + data + "\nStatus: " + status);
+                    });
+                });
+
+            }, function(error) {
+                console.error(error);
+            }, {
+                enableHighAccuracy: false,
+                maximumAge: 0,
+                timeout: Infinity
+            });
+        } else {
+            alert('GPS를 지원하지 않습니다');
+        }
+
+
+    }
+
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4eNRqzjvSO377TBROM49jWkpnphBoaZk&callback=initMap">
+</script>
+
+
+
+
+
