@@ -7,9 +7,6 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.get('/chat',function(req,res,next){
-  res.render('index');
-});
 
 router.get('/walwal',function(req,res,next){
     res.render('walwal');
@@ -23,4 +20,13 @@ router.get('/setting',function(req,res,next){
 router.get('/walwalDetail',function(req,res,next){
     res.render('walwalDetail');
 });
+
+router.get('/getallphoto',function (req,res,next) {
+
+});
+
+router.get('/getphotho/:id',function (req,res, next) {
+
+});
+
 module.exports = router;

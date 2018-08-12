@@ -108,7 +108,7 @@
         });
         $("#chatBtn"). click(function () {
             alert('hi');
-            $.get("/chat", function(data, status){
+            $.get("/", function(data, status){
                 alert('hihihi')
                 alert("Data: " + data + "\nStatus: " + status);
             });
