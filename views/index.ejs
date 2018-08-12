@@ -107,12 +107,8 @@
             });
         });
         $("#chatBtn"). click(function () {
-            alert('hi');
-            $.get("/", function(data, status){
-                alert('hihihi')
-                alert("Data: " + data + "\nStatus: " + status);
-            });
-        });
+            location.href="/";
+       });
         $("#setBtn"). click(function () {
             $.get("/setting", function(data, status){
                 $(".chat-history").html(data);
