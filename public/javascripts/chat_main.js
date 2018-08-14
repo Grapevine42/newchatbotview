@@ -161,10 +161,9 @@ $( document ).ready(function() {
 // Trigger photo take
         document.getElementById("snap").addEventListener("click", function() {
             var image= context.drawImage(video, 0, 0, 640, 480);
+            image.src = canvas.toDataURL('images');
         });
-        document.getElementById("sendPhoto").addEventListener("click", function() {
-      alert('hihi');
-        });
+
     })
 
 
