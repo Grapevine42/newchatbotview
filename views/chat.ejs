@@ -1,0 +1,79 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="/javascripts/socket.io.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4eNRqzjvSO377TBROM49jWkpnphBoaZk">
+</script>
+
+<html>
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+          rel="stylesheet">
+    <link href="./stylesheets/mainStyle.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="inbox_msg">
+        <div class="mesgs" id = "cameraview">
+            cameraview
+        </div>
+        <div class="mesgs">
+            <div class="msg_history" id="msg_history">
+            </div>
+            <div class="type_msg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <button class="msg_send_btn" id="camera" type="button"><i class="fa fa-paper-plane-o"
+                                                                          aria-hidden="true"></i>
+                            </button>
+
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input_msg_write">
+                                <form>
+                                    <input type="text" class="write_msg"  id="chatinput"
+                                           placeholder="Type a message"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="msg_send_btn" id="send"  type="button"><i class="fa fa-paper-plane-o"
+                                                                          aria-hidden="true"></i>
+                                <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
+                                                                              aria-hidden="true"></i>
+
+                                </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="control_panel">
+                <div class="box">
+                    <div class="container bottom_panel">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-primary center" type="button">댕댕이</i>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary center" type="button">채팅</i>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary center" type="button">세</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script src="/javascripts/chat_main.js"></script>
+</html>

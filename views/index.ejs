@@ -5,11 +5,8 @@
   <title>Chat Widget</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!-- 합쳐지고 최소화된 최신 CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <!-- 부가적인 테마 -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 
@@ -92,6 +89,7 @@
 <script src='http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js'></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js'></script>
 <script src="javascripts/index.js"></script>
+<script src="javascripts/chat_main.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 <script>
@@ -103,6 +101,7 @@
         $("#walBtn"). click(function () {
             $.get("/walwal", function(data, status){
                 $(".chat-history").html(data);
+                console.log(data);
                 alert("Data: " + data + "\nStatus: " + status);
             });
         });
@@ -117,6 +116,102 @@
         });
 
     });
+    function createMapDiv (){
+
+    }
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: {lat: -33.9, lng: 151.2}
+        });
+        listphoto();
+        $("#test2").click(function () {
+
+            $.ajax({
+                url: 'http://192.168.90.97:8080/closeshel',
+                contentType: 'application/json',
+                method: 'POST',
+                crossDomain: true,
+                data: JSON.stringify({
+                    x: 37.528292,
+                    y: 127.117533
+                }),
+                success: function (data) {
+                    $('#test').html(data.name + '  ' + data.x + ' ' + data.y);
+                    beaches.push([data.name, parseFloat(data.x), parseFloat(data.y), 10]);
+                    setMarkers(map);
+                }, error: function (error) {
+                    alert(error);
+                }
+
+            });
+
+        });
+        setMarkers(map);
+    }
+
+    function setMarkers(map) {
+
+        var image = {
+            url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+            // This marker is 20 pixels wide by 32 pixels high.
+            size: new google.maps.Size(20, 32),
+            // The origin for this image is (0, 0).
+            origin: new google.maps.Point(0, 0),
+            // The anchor for this image is the base of the flagpole at (0, 32).
+            anchor: new google.maps.Point(0, 32)
+        };
+
+        var shape = {
+            coords: [1, 1, 1, 20, 18, 20, 18, 1],
+            type: 'poly'
+        };
+        for (var i = 0; i < beaches.length; i++) {
+            var beach = beaches[i];
+            var marker = new google.maps.Marker({
+                position: {lat: beach[1], lng: beach[2]},
+                map: map,
+                icon: image,
+                shape: shape,
+                title: beach[0],
+                zIndex: beach[3]
+            });
+        }
+        ;
+
+        marker.addListener('click', function () {
+            alert()
+            $.get("/walwalDetail", function (data, status) {
+                $("#map").html(data);
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+
+
+    }
+
+    function listphoto(){
+        var location;
+        $.ajax({
+            url : "http://192.168.90.97:8080/listphoto",
+            type : 'get',
+            success : function(data){
+                console.log(data+'data');
+                $.each(data , function(index,item){
+                    console.log('item.location '+item.location+' '+typeof item.location);
+                    location = (item.location+'').split(',');
+                    beaches.push([item._id,parseFloat(location[0]),parseFloat(location[1]),index]);
+                    console.log(beaches);
+                    alert(beaches);
+                });
+
+            },
+            error : function(){
+                alert("error");
+            }
+        });
+    }
+
 </script>
 
 
