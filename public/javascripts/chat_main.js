@@ -10,7 +10,7 @@ $( document ).ready(function() {
         }
     }
     var chatbody = $("#msg_history");
-    var socket = io.connect("192.168.1.80:8080");
+    var socket = io.connect("http://172.20.10.2:8080");
 
 
     var myInfo = {
@@ -72,29 +72,50 @@ $( document ).ready(function() {
             center: {lat: myInfo.lat, lng: myInfo.long}
         });
 
-        // listphoto();
-        // $("#test2").click(function () {
-        //     $.ajax({
-        //         url: 'http://192.168.90.97:8080/closeshel',
-        //         contentType: 'application/json',
-        //         method: 'POST',
-        //         crossDomain: true,
-        //         data: JSON.stringify({
-        //             x: 37.528292,
-        //             y: 127.117533
-        //         }),
-        //         success: function (data) {
-        //             $('#test').html(data.name + '  ' + data.x + ' ' + data.y);
-        //             beaches.push([data.name, parseFloat(data.x), parseFloat(data.y), 10]);
-        //             setMarkers(map);
-        //         }, error: function (error) {
-        //             alert(error);
-        //         }
-        //
-        //     });
-        //
-        // });
-        // setMarkers(map);
+        setMarkers(map);
+    }
+
+
+    function setMarkers(map) {
+
+        var image = {
+            url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+            // This marker is 20 pixels wide by 32 pixels high.
+            size: new google.maps.Size(20, 32),
+            // The origin for this image is (0, 0).
+            origin: new google.maps.Point(0, 0),
+            // The anchor for this image is the base of the flagpole at (0, 32).
+            anchor: new google.maps.Point(0, 32)
+        };
+
+        var shape = {
+            coords: [1, 1, 1, 20, 18, 20, 18, 1],
+            type: 'poly'
+        };
+
+         $.ajax({
+                    url: 'http://172.20.10.2:8080/closeshel',
+                    contentType: 'application/json',
+                    method: 'POST',
+                    crossDomain: true,
+                    data: JSON.stringify({
+                        x: myInfo.lat,
+                        y: myInfo.long
+                    }),
+                    success: function (data) {
+                        var marker = new google.maps.Marker({
+                            position: {lat: parseFloat(data.x), lng: parseFloat(data.y)},
+                            map: map,
+                            icon: image,
+                            shape: shape,
+                            title: data.name,
+                            zIndex: 1
+                        });
+                    }, error: function (error) {
+                        alert(error);
+                    }
+
+                });
     }
 
     function createSlider() {
@@ -122,6 +143,7 @@ $( document ).ready(function() {
         $("#cameraview").append(
             '<video id="video" width="640" height="480" autoplay></video>\n' +
             '<button id="snap">Snap Photo</button>\n' +
+            '<button id="sendPhoto">sendPhoto</button>\n'+
             '<canvas id="canvas" width="640" height="480"></canvas>\n'
         )
         var video = document.getElementById('video');
@@ -138,7 +160,10 @@ $( document ).ready(function() {
 
 // Trigger photo take
         document.getElementById("snap").addEventListener("click", function() {
-            context.drawImage(video, 0, 0, 640, 480);
+            var image= context.drawImage(video, 0, 0, 640, 480);
+        });
+        document.getElementById("sendPhoto").addEventListener("click", function() {
+      alert('hihi');
         });
     })
 
@@ -177,7 +202,7 @@ $( document ).ready(function() {
     socket.on('message', (data) => {
         var getMsg = data;
         console.log(getMsg);
-        if(data.type== 'map'){
+        if(data.type== 'map'){ //현재 위치에서 가장 가까운 대피소를 보기
             drawMap();
         }
         else if(data.type== 'image'){
