@@ -8,7 +8,7 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4eNRqzjvSO377TBROM49jWkpnphBoaZk">
 </script>
-
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <html>
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
@@ -20,6 +20,18 @@
     <div class="inbox_msg">
         <div class="mesgs" id = "cameraview">
             cameraview
+        </div>
+        <div id = "walwal">
+            <div id= 'map_google' style='width: 100%; height: 100%'>" + "지도를 그릴거에요" +"</div>
+        </div>
+        <div id = "walDetail">
+
+            <div class="w3-content w3-display-container">
+
+                <div id="walSlider"></div>
+               <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+              <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button> </div>
+            </div>
         </div>
         <div class="mesgs">
             <div class="msg_history" id="msg_history">
@@ -47,7 +59,9 @@
                                 <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
                                                                               aria-hidden="true"></i>
 
+
                                 </button>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -57,13 +71,13 @@
                     <div class="container bottom_panel">
                         <div class="row">
                             <div class="col-md-4">
-                                <button class="btn btn-primary center" type="button">댕댕이</i>
+                                <button id="walwalBtn" class="btn btn-primary center" type="button">댕댕이</button>
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-primary center" type="button">채팅</i>
+                                <button class="btn btn-primary center" type="button">채팅</button>
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-primary center" type="button">세</i>
+                                <button class="btn btn-primary center" type="button">세</button>
                             </div>
                         </div>
                     </div>
