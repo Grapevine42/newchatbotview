@@ -1,4 +1,5 @@
 $( document ).ready(function() {
+    var serverAddress = "localhost";
     var mapEntityArray = ["situation_fire","situation_fire","situation_fire","situation_fire","situation_fire"];
     var imageEntityArray = ["situation_fire","situation_fire","situation_fire","situation_fire","situation_fire"];
     $("#cameraview").hide();
@@ -11,7 +12,7 @@ $( document ).ready(function() {
         }
     }
     var chatbody = $("#msg_history");
-    var socket = io.connect("http://172.20.10.2:8080");
+    var socket = io.connect("http://localhost:8080");
 
 
     var myInfo = {
@@ -278,13 +279,6 @@ console.log('map'+map);
     });
 
 
-
-    $("#chatinput input[type=text]").on('keydown', function (e) {
-        if (e.which == 13) {
-            addMyTalk()
-        }
-    });
-
     $(".newMessage-back").click(function () {
         $(".side-two").css({
             "left": "-100%"
@@ -293,15 +287,12 @@ console.log('map'+map);
 
     function addMyTalk(msg) {
         //화면에 표시하기
-        var mymsg = $("    <div class=\"outgoing_msg\">\n" +
-            "            <div class=\"incoming_msg_img\"><img src=\"https://ptetutorials.com/images/user-profile.png\"\n" +
-            "        alt=\"sunil\"></div>\n" +
-            "            <div class=\"sent_msg\">\n" +
-            "            <div class=\"received_withd_msg\">\n" +
-            "            <p>" + msg +"</p>\n" +
-            "            <span class=\"time_date\"> 11:01 AM    |    June 9</span></div>\n" +
-            "        </div>\n" +
-            "        </div>\n")
+        var mymsg = $(
+            "<div class=\"outgoing_msg\">\n" +
+            "<div class=\"sent_msg\">\n" +
+            "<p>" + msg +"</p>" +
+            "<span class=\"time_date\"> "+moment().calendar()+"</span> </div>\n" +
+            "</div>\n")
         chatbody.append(mymsg);
         socket.emit('message', msg);
     }
@@ -324,14 +315,12 @@ console.log('map'+map);
         else if(data.type=='option'){
             //{ type: ‘option’, data: [ ‘situation’, ‘escape’, ‘request’ ] }
             var theirMsg = $("    <div class=\"outgoing_msg\">\n" +
-                "            <div class=\"incoming_msg_img\"><img src=\"https://ptetutorials.com/images/user-profile.png\"\n" +
-                "        alt=\"sunil\"></div>\n" +
-                "            <div class=\"received_msg\">\n" +
-                "            <div class=\"received_withd_msg\">\n" +
-                "            <p>" + getMsg.data.output.text[0] +"</p>\n" +
-                "            <span class=\"time_date\"> 11:01 AM    |    June 9</span></div>\n" +
-                "        </div>\n" +
-                "        </div>\n")
+                "<div class=\"received_msg\">\n" +
+                "<div class=\"received_withd_msg\">\n" +
+                "<p>" + getMsg.data.output.text[0] +"</p>\n" +
+                "<span class=\"time_date\">" +moment().calendar() +"</span></div>\n" +
+                "</div>\n" +
+                "</div>\n")
             chatbody.append(theirMsg);
 
         }
@@ -342,7 +331,7 @@ console.log('map'+map);
             "            <div class=\"received_msg\">\n" +
             "            <div class=\"received_withd_msg\">\n" +
             "            <p>" + getMsg.data.output.text[0] +"</p>\n" +
-            "            <span class=\"time_date\"> 11:01 AM    |    June 9</span></div>\n" +
+            "<span class=\"time_date\">" +moment().calendar() +"</span></div>\n" +
             "        </div>\n" +
             "        </div>\n")
         chatbody.append(theirMsg);}
@@ -406,6 +395,14 @@ console.log('map'+map);
     }
 
 //-----------------------walDetail - slider------------------------
+    $('input').keyup(function(e) {
+        if (e.keyCode == 13) {
+            var value = $("#chatinput").val();
+            addMyTalk(value);
+        };
+    });
+
+
 
     var slideIndex = 1;
     showDivs(slideIndex);
