@@ -10,7 +10,9 @@ router.get('/main', function (req, res, next) {
     res.render('chat');
 })
 
-
+router.get('/main2', function (req, res, next) {
+    res.render('main2');
+})
 
 router.get('/walwal',function(req,res,next){
     res.render('walwal');

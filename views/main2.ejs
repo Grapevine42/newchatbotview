@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+<head>
+    <title>Simple-Chat-UI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no; target-densityDpi=device-dpi"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/stylesheets/index.css" rel="stylesheet">
+    <script src="/javascripts/socket.io.js"></script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/swiper.css">
+    <script src="/javascripts/swiper.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4eNRqzjvSO377TBROM49jWkpnphBoaZk">
+    </script>
+
+</head>
+
+<body>
+
+<div class="main_section">
+    <div class="container">
+        <div class="chat_container">
+            <div class="col-sm-3 hidden-xs chat_sidebar">
+                <div class="row" style="text-align: center">
+                </div>
+            </div>
+            <div class="col-sm-6 message_section">
+                <div class="row">
+                    <div class="new_message_head">
+                        <div class="pull-left" style="width: 120px">
+                        </div>
+                        <div style="text-align: center">Helpy</div>
+                        <div class="pull-right" style="width: 120px">
+                        </div>
+                    </div>
+                    <div class="chat_area">
+                        <div class="camera_area" hidden="hidden">
+                            <div class="dim-layer">
+                                <div class="dimBg"></div>
+                                <div id="layer2" class="pop-layer">
+                                    <div class="pop-container">
+                                        <div class="pop-conts">
+                                            <video id="video" width="100%" height="100%" autoplay></video>
+                                            <button class="btn btn-primary" id="snap">Snap Photo</button>
+                                            <canvas id="canvas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="walwal_area" hidden="hidden">
+                            <div class="dim-layer">
+                                <div class="dimBg"></div>
+                                <div id="layer2" class="pop-layer">
+                                    <div class="pop-container">
+                                        <div id="walwalmap" style="height: 960px"></div>
+
+
+                                        <div class="pop-conts">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="list-unstyled" id="chatBody">
+                            <li class="left clearfix partner_chat">
+									<span class="chat-img1 pull-left">
+					                  	<img src="/images/robot.png" alt="User Avatar" class="img-circle">
+                 					 </span>
+
+                                <div class="chat-body1 clearfix">
+                                    <div class=" chat-body-slider row">
+                                        adsfasdfasdfads
+                                        asddasfasdf
+
+                                        <div class="swiper-container">
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide">Slide 1</div>
+                                                <div class="swiper-slide">Slide 2</div>
+                                                <div class="swiper-slide">Slide 3</div>
+                                                <div class="swiper-slide">Slide 4</div>
+                                                <div class="swiper-slide">Slide 5</div>
+                                                <div class="swiper-slide">Slide 6</div>
+                                                <div class="swiper-slide">Slide 7</div>
+                                                <div class="swiper-slide">Slide 8</div>
+                                                <div class="swiper-slide">Slide 9</div>
+                                                <div class="swiper-slide">Slide 10</div>
+                                            </div>
+                                            <!-- Add Pagination -->
+                                            <div class="swiper-pagination"></div>
+                                            <!-- Add Arrows -->
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="left clearfix partner_chat">
+									<span class="chat-img1 pull-left">
+					                  	<img src="/images/robot.png" alt="User Avatar" class="img-circle">
+                 					 </span>
+
+                                <div class="chat-body1 clearfix">
+                                    <div class="chat-body-slider">
+                                        Refuge info
+                                        <div id="map_google">
+                                        </div>
+                                        <table class="table chat-map-info">
+                                            <tr>
+                                                <td>location</td>
+                                                <td>total required time</td>
+                                            </tr>
+                                            <tr>
+                                                <td>601 Union Street,
+                                                    Seattle, WA, USA 98101
+                                                </td>
+                                                <td>00:10</td>
+                                            </tr>
+                                        </table>
+                                        <div>
+                                            <button class="btn">View Detail</button>
+                                        </div>
+                                    </div>
+                            </li>
+
+                            <li class="left clearfix partner_chat">
+									<span class="chat-img1 pull-left">
+					                  	<img src="/images/robot.png" alt="User Avatar" class="img-circle">
+                 					 </span>
+
+                                <div class="chat-body1 clearfix">
+                                    <div class="chat-body-slider" style="margin-top: 10px">
+                                        <div class="selectQuestion">
+                                            Don't worry! Please click on the
+                                            circumstances you are inso that
+                                            I can correctly tell you what to do.
+                                        </div>
+                                        <div class="selectList">
+                                            <button type="button" class="btn btn-outline-primary">Yes</button>
+                                            <button type="button" class="btn btn-outline-secondary">No</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="left clearfix partner_chat">
+									<span class="chat-img1 pull-left">
+					                  	<img src="/images/robot.png" alt="User Avatar" class="img-circle">
+                 					 </span>
+
+                                <div class="chat-body1 clearfix">
+                                    <div class="chat-body-slider" style="margin-top: 10px">
+                                        <div class="selectQuestion">
+                                            Don't worry! Please click on the
+                                            circumstances you are inso that
+                                            I can correctly tell you what to do.
+                                        </div>
+                                        <div class="selectList">
+                                            <button type="button" class="btn btn-outline-primary">Yes</button>
+                                            <button type="button" class="btn btn-outline-secondary">No</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!--chat_area-->
+
+                    <div class="message_write">
+                        <!--<div class="chat_bottom"-->
+                             <!--style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #cdcdcd">-->
+
+                        <!--</div>-->
+                        <div class="menu">
+                            <div class="col-md-1 col-xs-1 col-sm-1">
+                                <a href="#" class="pull-right upload_btn" style="margin-left: 10px"><i
+                                            class="fa fa-camera fa-2x" id="cameraopen" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="col-md-10 col-xs-10 col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" id="msgInput" class="form-control" placeholder="type a message">
+                                    <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">Send</button>
+                                </span>
+                                </div><!-- /input-group -->
+
+                            </div>
+                            <div class="col-md-1 col-xs-1 col-sm-1">
+                                <a href="#" class="pull-left upload_btn" style="margin-right: 10px;"><i
+                                            class="fa fa-microphone fa-2x" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <div class="chat_bottom"
+                             style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #cdcdcd">
+                            <div class="col-md-4 col-xs-4 col-sm-4"style="text-align: center">
+                                <button class="btn"  id="wal-btn" ><img style="width: 44px; height: 44px" class="btn-img" src="/images/disable_sharingmap.png"></button>
+                            </div>
+                            <div class="col-md-4 col-xs-4 col-sm-4"style="text-align: center">
+                                <button class="btn" id="chat-btn" ><img style="width: 44px; height: 44px" class="btn-img" src="/images/disable_chatbot.png"></button>
+                            </div>
+                            <div class="col-md-4 col-xs-4 col-sm-4"style="text-align: center">
+                                <button class="btn" id="setting-btn" ><img style="width: 44px; height: 44px" class="btn-img" src="/images/dsiable_setting.png"></button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--message_section-->
+            <div class="col-sm-3 hidden-xs chat_sidebar">
+                <div class="row" style="text-align: center">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.autosize/3.0.20/autosize.min.js"></script>
+    <script src="/javascripts/chat_main.js"></script>
+
+    <script>
+    </script>
+</body>
+
+</html>
