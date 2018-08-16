@@ -146,7 +146,7 @@ $( document ).ready(function() {
 
 //----walwal
 
-    var beaches = [['hi', 37.528292, 127.117533, 0]];
+    var beaches = [['hi', 37.528292, 127.117533, 0],['saperska',52.379118,16.917010,1]];
 
     function initWalwal() {
         console.log("init map");
@@ -171,12 +171,14 @@ $( document ).ready(function() {
             type: 'poly'
         };
 
+
         var location;
         console.log("set wal marker");
         $.ajax({
             url: "http://localhost:8080/users",
             type: 'get',
             success: function (data) {
+
                 console.log(data + 'data');
                 $.each(data, function (index, item) {
                     console.log('item.location ' + item.location + ' ' + typeof item.location);
@@ -195,10 +197,11 @@ $( document ).ready(function() {
                         zIndex: beach[3]
                     });
                 }
-                ;
+
                 marker.addListener('click', function () {
+                    console.log('marker clicked')
                     alert('marker clicked');
-                    walDetail();
+                   initWalDetail();
                 });
             },
             error: function () {
@@ -210,7 +213,7 @@ $( document ).ready(function() {
     }
 
 
-    function walDetail(){
+    function drwaWalDetail(){
         $('#walwal').hide();
         $('#walDetail').show();
         var str;
@@ -302,7 +305,7 @@ $( document ).ready(function() {
         if(data.type== 'map'){ //현재 위치에서 가장 가까운 대피소를 보기
             drawMap();
         }
-        else if(data.type== 'image'){
+        else if(data.type== 'imageList'){
             drawImageSlider();
         }
         else if(data.type=='drawDisasterPreview'){
@@ -312,8 +315,8 @@ $( document ).ready(function() {
             var optionList = data.option;
             var optionHTML = ""
             for (let i = 0; i < optionList.length; i++) {
-                const optionListElement = optionList[i];
-                optionHTML = optionHTML + "<button type='button' onclick=sendOption('"+optionListElement+"\') value='"+optionListElement+"' class=\"btn btn-outline-primary\">"+optionListElement+"</button><br>"
+                const optionListElement = optionList[i].label;
+                optionHTML = optionHTML + "<button type='button' onclick=sendOption('"+optionList[i].value+"\') value='"+optionList[i].value+"' class=\"btn btn-outline-primary\">"+optionListElement+"</button><br>"
             }
             var theirMsg =
                 "                            <li class=\"left clearfix partner_chat\">\n" +
@@ -336,6 +339,24 @@ $( document ).ready(function() {
 
             chatbody.append(theirMsg);
 
+        }else if(data.type =='newsPreview'){
+            var theirMsg ="  <li class=\"left clearfix partner_chat\">\n" +
+                "<span class=\"chat-img1 pull-left\">\n" +
+                "<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
+                "</span>\n" +
+                "                                <div class=\"chat-body1 clearfix\">\n" +
+                "                                    <div class=\"chat-body-slider\" style=\"margin-top: 10px\">\n" +
+                "                                        <div class=\"selectQuestion\">\n" +
+                "                                            <center><h3>Today's News</h3></center><hr>\n" +
+                "                                            <a><b>Earthquake: 4.4 quake strikes Inland</b></a><br>This information comes from the USGS Earthquake Notification Service and this post was created <hr>\n" +
+                "                                            <a><b>2.6 earthquake shakes near Concord</b></a><br>CONCORD (KRON) - A 2.6 magnitude earthquake has struck near Concord on Tuesday afternoon, according<hr>\n" +
+                "                                            <a><b>Death Toll From Indonesia Earthquake Passes 43</b></a><br>An earthquake expected in Istanbul may claim the lives of 26,000 to 30,000 people...\n" +
+                "                                        </div>\n" +
+                "                                    </div>\n" +
+                "                                </div>\n" +
+                "                            </li>\n"
+
+            chatbody.append(theirMsg);
         }
         else{
         var theirMsg = $(
@@ -376,44 +397,75 @@ $( document ).ready(function() {
 
     }
 
-    function drawSelection() {
-        var theirMsg = $("    <div class=\"outgoing_msg\">\n" +
-            "            <div class=\"incoming_msg_img\"><img src=\"https://ptetutorials.com/images/user-profile.png\"\n" +
-            "        alt=\"sunil\"></div>\n" +
-            "            <div class=\"received_msg\">\n" +
-            "            <div class=\"received_withd_msg\">\n" +
-            "            <div = 'selection'>" + "지도를 그릴거에요" +"</div>\n" +
-            "            <span class=\"time_date\"> 11:01 AM    |    June 9</span></div>\n" +
-            "        </div>\n" +
-            "        </div>\n")
-        chatbody.append(theirMsg);
-    }
 
     function drawImageSlider() {
-        var theirMsg = $("    <div class=\"outgoing_msg\">\n" +
-            "            <div class=\"incoming_msg_img\"><img src=\"https://ptetutorials.com/images/user-profile.png\"\n" +
-            "        alt=\"sunil\"></div>\n" +
-            "            <div class=\"received_msg\">\n" +
-            "            <div class=\"received_withd_msg\">\n" +
-            "            <img src= \'"+ imageName +" \'>" + "지도를 그릴거에요" +"</img>\n" +
-            "            <span class=\"time_date\"> 11:01 AM    |    June 9</span></div>\n" +
-            "        </div>\n" +
-            "        </div>\n")
+        var theirMsg = $(" <li class=\"left clearfix partner_chat\">\n" +
+            "<span class=\"chat-img1 pull-left\">\n" +
+            "<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
+            "</span>\n" +
+            "<div class=\"chat-body1 clearfix\">\n" +
+            "<div class=\" chat-body-slider row\">\n" +
+            "                                        adsfasdfasdfads\n" +
+            "                                        asddasfasdf\n" +
+            "\n" +
+            "                                        <div class=\"swiper-container\">\n" +
+            "                                            <div class=\"swiper-wrapper\">\n" +
+            "                                                <div class=\"swiper-slide\"><img src=\"/images/casker-journey.jpg\"></div>\n" +
+            "                                                <div class=\"swiper-slide\"><img src=\"/images/casker-tender.jpg\"></div>\n" +
+            "                                                <div class=\"swiper-slide\"><img src=\"/images/casker-journey.jpg\"></div>\n" +
+            "                                                <div class=\"swiper-slide\">Slide 4</div>\n" +
+            "                                                <div class=\"swiper-slide\">Slide 5</div>\n" +
+            "                                                <div class=\"swiper-slide\">Slide 6</div>\n" +
+            "                                                <div class=\"swiper-slide\">Slide 7</div>\n" +
+            "                                                <div class=\"swiper-slide\">Slide 8</div>\n" +
+            "                                                <div class=\"swiper-slide\">Slide 9</div>\n" +
+            "                                                <div class=\"swiper-slide\">Slide 10</div>\n" +
+            "                                            </div>\n" +
+            "                                            <!-- Add Pagination -->\n" +
+            "                                            <div class=\"swiper-pagination\"></div>\n" +
+            "                                            <!-- Add Arrows -->\n" +
+            "                                            <div class=\"swiper-button-next\"></div>\n" +
+            "                                            <div class=\"swiper-button-prev\"></div>\n" +
+            "                                        </div>\n" +
+            "                                    </div>\n" +
+            "                                </div>\n" +
+            "                            </li>\n")
         chatbody.append(theirMsg);
 
     }
 
 
     function drawDisasterPreview(location, status) {
-        var theirMsg = $("    <div class=\"outgoing_msg\">\n" +
-            "            <div class=\"incoming_msg_img\"><img src=\"https://ptetutorials.com/images/user-profile.png\"\n" +
-            "        alt=\"sunil\"></div>\n" +
-            "            <div class=\"received_msg\">\n" +
-            "            <div class=\"received_withd_msg\">\n" +
-            "           <h4>Disaster Info.<br>"+location+"<br></h4><h2>"+status+"</h2>\n" +
-            "            <span class=\"time_date\"> 11:01 AM    |    June 9</span></div>\n" +
-            "        </div>\n" +
-            "        </div>\n")
+
+        var statusImoji;
+
+        if(status == 'safe'){
+            statusImoji = '😀';
+        }else if( status=='advisory'){
+            statusImoji = '🤔';
+        }else if(status=='warning') {
+            statusImoji = '👿';
+        }else{
+            statusImoji='😡';
+        }
+
+        var theirMsg = $("\n" +
+            "                            <li class=\"left clearfix partner_chat\">\n" +
+            "<span class=\"chat-img1 pull-left\">\n" +
+            "<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
+            "</span>\n" +
+            "                                <div class=\"chat-body1 clearfix\">\n" +
+            "                                    <div class=\"chat-body-slider\" style=\"margin-top: 10px\">\n" +
+            "                                        <div class=\"selectQuestion\">\n" +status+
+            "                                            Currently, there is noearthquake. Is there any otherinformation you need? (Y/N)<br><hr>\n" +
+            "                                           Disaster Info. <br>\n" +
+            "                                            <span style=\"font-size: 50px\">😀</span>\n" +
+            "                                            <h3>"+statusImoji+"</h3><br>\n" +
+            "                                            location." + location+
+            "                                        </div>\n" +
+            "                                    </div>\n" +
+            "                                </div>\n" +
+            "                            </li>\n")
         chatbody.append(theirMsg);
 
     }
@@ -517,6 +569,22 @@ $( document ).ready(function() {
 
     })
 
+    $("#closeWalWal").click(function () {
+        $(".walwal_area").hide();
+        $(".dim-layer").hide();
+
+    })
+
+
+    function initWalDetail(){
+        $(".walwal_area").hide();
+        $(".walDetail_area").show();
+        var $href = $(this).attr('href');
+        layer_popup($href);
+        $(".dim-layer").show();
+    }
+
+
     function layer_popup(el){
         var $el = $(el);        //레이어의 id를 $el 변수에 저장
         var isDim = $el.prev().hasClass('dimBg');   //dimmed 레이어를 감지하기 위한 boolean 변수
@@ -547,6 +615,11 @@ $( document ).ready(function() {
     }
 
 });
+
+
+function openDetail(){
+
+}
 function openNav() {
     document.getElementById("myNav").style.height = "100%";
 }
