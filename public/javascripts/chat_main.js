@@ -334,7 +334,7 @@ $( document ).ready(function() {
                 "</div>\n" +
                 "<div class=\"selectList\">\n" +
                 optionHTML +
-                "</div>\n" +
+                "</div>\n" +'<div class="row" id ="selectedOption"></div>'+
                 "\n" +
                 "</div>\n" +
                 "</div>\n" +
@@ -342,30 +342,31 @@ $( document ).ready(function() {
 
             chatbody.append(theirMsg);
 
-        }else if(data.type =='newsPreview'){
-            var str='';
-            for(var i=0; i<data.title.length; i++){
-                str += '<a><b>' +
-                    data[i].title +
-                    '</b></a><br>' +
-                    data[i].content+
-                    '<hr>'
-            }
-            var theirMsg ="  <li class=\"left clearfix partner_chat\">\n" +
-                "<span class=\"chat-img1 pull-left\">\n" +
-                "<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
-                "</span>\n" +
-                "                                <div class=\"chat-body1 clearfix\">\n" +
-                "                                    <div class=\"chat-body-slider\" style=\"margin-top: 10px\">\n" +
-                "                                        <div class=\"selectQuestion\">\n" +
-                "                                            <center><h3>Today's News</h3></center><hr>\n" +str+
-                "                                        </div>\n" +
-                "                                    </div>\n" +
-                "                                </div>\n" +
-                "                            </li>\n"
-
-            chatbody.append(theirMsg);
+        }    else if(data.type =='newsPreview'){
+        var str='';
+        var len = data.news.length;
+        for(var i=0; i<len; i++){
+            str += '<a><b>' +
+                data.news[i].title +
+                '</b></a><br>' +
+                data.news[i].content+
+                '<hr>'
         }
+        var theirMsg ="  <li class=\"left clearfix partner_chat\">\n" +
+            "<span class=\"chat-img1 pull-left\">\n" +
+            "<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
+            "</span>\n" +
+            "                                <div class=\"chat-body1 clearfix\">\n" +
+            "                                    <div class=\"chat-body-slider\" style=\"margin-top: 10px\">\n" +
+            "                                        <div class=\"selectQuestion\">\n" +
+            "                                            <center><h3>Today's News</h3></center><hr>\n" +str+
+            "                                        </div>\n" +
+            "                                    </div>\n" +
+            "                                </div>\n" +
+            "                            </li>\n"
+
+        chatbody.append(theirMsg);
+    }
         else{
         var theirMsg = $(
             "<li class=\"left clearfix partner_chat\">\n" +
@@ -454,7 +455,7 @@ $( document ).ready(function() {
 
     function drawDisasterPreview(location, status) {
 
-       var statusImoji;
+        var statusImoji;
 
         if(status == 'safe'){
             statusImoji = '😀';
@@ -473,12 +474,10 @@ $( document ).ready(function() {
             "</span>\n" +
             "                                <div class=\"chat-body1 clearfix\">\n" +
             "                                    <div class=\"chat-body-slider\" style=\"margin-top: 10px\">\n" +
-            "                                        <div class=\"selectQuestion\">\n" +status+
-            "                                            Currently, there is noearthquake. Is there any otherinformation you need? (Y/N)<br><hr>\n" +
+            "                                        <div class=\"selectQuestion\">\n"+
             "                                           Disaster Info. <br>\n" +
-            "                                            <span style=\"font-size: 50px\">"+statusImoji+"</span>\n" +
-            "                                         <br>\n" +
-            "                                            location." + location+
+            "                                            <span style=\"font-size: 50px\">"+statusImoji+status+"</span><br>\n" +
+            "                                            location.<br>" + location+
             "                                        </div>\n" +
             "                                    </div>\n" +
             "                                </div>\n" +
@@ -752,8 +751,9 @@ function openNav() {
 }
 
 function sendOption(option) {
-    console.log($(this).attr("value"));
+    //console.log($(this).attr("value"));
     console.log(option);
+    $('#selectedOption').html(option);
     socket.emit('message', option);
 }
 
