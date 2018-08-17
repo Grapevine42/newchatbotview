@@ -15,7 +15,9 @@
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <link rel="stylesheet" href="/stylesheets/swiper.css">
     <script src="/javascripts/swiper.js"></script>
-
+    <script src="/javascripts/watson-speech/dist/watson-speech.js"></script>
+    <!-- window.fetch pollyfill for IE/Edge & Older Chrome/FireFox -->
+    <script src="/javascripts/fetch/fetch.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4eNRqzjvSO377TBROM49jWkpnphBoaZk">
     </script>
 
@@ -264,7 +266,7 @@
 
                             </div>
                             <div class="col-md-1 col-xs-1 col-sm-1">
-                                <a href="#" class="pull-left upload_btn" style="margin-right: 10px;"><i
+                                <a href="#" class="pull-left upload_btn" style="margin-right: 10px;" id="mcBtn"><i
                                             class="fa fa-microphone fa-2x" aria-hidden="true"></i></a>
                             </div>
                         </div>

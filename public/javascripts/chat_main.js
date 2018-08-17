@@ -26,7 +26,6 @@ $( document ).ready(function() {
     }
     var chatbody = $("#chatBody");
 
-
     var myInfo = {
         name: "defualt",
         blood :"O rh+",
@@ -59,7 +58,7 @@ $( document ).ready(function() {
     }
     function geoFindMe(callback) {
         if (!navigator.geolocation) {
-            alert("사용자 위치를 파악할 수 없습니다");
+           // alert("사용자 위치를 파악할 수 없습니다");
             return;
         }
 
@@ -117,7 +116,7 @@ $( document ).ready(function() {
                         y: myInfo.long
                     }),
                     success: function (data) {
-                        alert('확인');
+                       // alert('확인');
                         var marker = new google.maps.Marker({
                             position: {lat: parseFloat(data.x), lng: parseFloat(data.y)},
                             map: map,
@@ -132,9 +131,6 @@ $( document ).ready(function() {
 
                 });
     }
-
-
-
 
 
     function createSlider() {
@@ -199,12 +195,10 @@ $( document ).ready(function() {
                     });
                     marker.addListener('click', function () {
                         console.log('marker clicked')
-                        alert('marker clicked');
+                       // alert('marker clicked');
                         initWalDetail();
                     });
                 }
-
-
             },
             error: function () {
                 alert("error");
@@ -223,14 +217,14 @@ $( document ).ready(function() {
             success: function (data) {
                 console.log('draw Detail');
                 str='<div class="swiper-container"> <div class="swiper-wrapper">';
-                $.each(data, function (index, item) {
-                str += '<div class="swiper-slide"><image src="http://localhost:8080/'+item.path+'"></div>'
-                });
+                // $.each(data, function (index, item) {
+                str += '<div class="swiper-slide"><image src="http://localhost:8080/'+data[1].path+'"></div>'
+                //});
                 str+=' </div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>'
                 str += '<br><h3>location .</h3><br> '+ data[0].locationName;
                 str += '<br><h3>Time . </h3><br> '+ data[0].time;
                 $('#walDetail').html(str);
-    }
+            }
         });
 
     }
@@ -257,7 +251,7 @@ $( document ).ready(function() {
     });
 
     $("#walwalBtn").click(function () { //왈왈이 페이지
-        alert('hi');
+        //alert('hi');
        $('#walwal').show();
         initWalwal();
 
@@ -319,7 +313,7 @@ $( document ).ready(function() {
             var optionHTML = ""
             for (let i = 0; i < optionList.length; i++) {
                 const optionListElement = optionList[i].label;
-                optionHTML = optionHTML + "<button type='button' onclick=sendOption('"+optionList[i].value+"\') value='"+optionList[i].value+"' class=\"btn btn-outline-primary\">"+optionListElement+"</button><br>"
+                optionHTML = optionHTML + "<button type='button' id='"+optionList[i].value+"\' onclick=sendOption('"+optionList[i].value+"\') value='"+optionList[i].value+"' class=\"optionBtn btn btn-outline-primary\">"+optionListElement+"</button><br>"
             }
             var theirMsg =
                 "                            <li class=\"left clearfix partner_chat\">\n" +
@@ -334,7 +328,7 @@ $( document ).ready(function() {
                 "</div>\n" +
                 "<div class=\"selectList\">\n" +
                 optionHTML +
-                "</div>\n" +'<div class="row" id ="selectedOption"></div>'+
+                "</div>\n" +
                 "\n" +
                 "</div>\n" +
                 "</div>\n" +
@@ -701,6 +695,41 @@ $( document ).ready(function() {
         $(".dim-layer").hide();
 
     })
+
+
+    $("#mcBtn").click(function () {
+
+        fetch('http://localhost:3005/api/speech-to-text/token')
+            .then(function(response) {
+                console.log(response);
+                return response.text();
+            }).then(function (token) {
+            console.log(token);
+            var stream = WatsonSpeech.SpeechToText.recognizeMicrophone({
+                token: token,
+                object_mode: false
+            });
+
+            stream.setEncoding('utf8'); // get text instead of Buffers for on data events
+
+            stream.on('data', function(data) {
+                var text = data.slice(0, -1);
+                console.log(text);
+                $("#msgInput").val($("#msgInput").val()+ text);
+            });
+
+            stream.on('error', function(err) {
+                console.log(err);
+            });
+
+            document.querySelector('#stop').onclick = stream.stop.bind(stream);
+        }).catch(function(error) {
+            console.log(error);
+        });
+    })
+
+
+
     function initWalDetail(){
         $(".walwal_area").hide();
         drawWalDetail();
@@ -751,9 +780,10 @@ function openNav() {
 }
 
 function sendOption(option) {
-    //console.log($(this).attr("value"));
+    //  console.log(this.id)
+    // $('#escape')
+    $('#'+option).css('color','mediumturquoise');
     console.log(option);
-    $('#selectedOption').html(option);
     socket.emit('message', option);
 }
 
