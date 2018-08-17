@@ -117,6 +117,7 @@ $( document ).ready(function() {
                         y: myInfo.long
                     }),
                     success: function (data) {
+                        alert('확인');
                         var marker = new google.maps.Marker({
                             position: {lat: parseFloat(data.x), lng: parseFloat(data.y)},
                             map: map,
@@ -559,6 +560,47 @@ $( document ).ready(function() {
             zoom: 10,
             center: {lat: myInfo.lat, lng: myInfo.long}
         });
+        var image = {
+            url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+            // This marker is 20 pixels wide by 32 pixels high.
+            size: new google.maps.Size(20, 32),
+            // The origin for this image is (0, 0).
+            origin: new google.maps.Point(0, 0),
+            // The anchor for this image is the base of the flagpole at (0, 32).
+            anchor: new google.maps.Point(0, 32)
+        };
+
+        var shape = {
+            coords: [1, 1, 1, 20, 18, 20, 18, 1],
+            type: 'poly'
+        };
+
+        $.ajax({
+            url: 'http://localhost:8080/closeshel',
+            contentType: 'application/json',
+            method: 'POST',
+            crossDomain: true,
+            data: JSON.stringify({
+                x: myInfo.lat,
+                y: myInfo.long
+            }),
+            success: function (data) {
+
+                var marker = new google.maps.Marker({
+                    position: {lat: parseFloat(data.x), lng: parseFloat(data.y)},
+                    map: map,
+                    icon: image,
+                    shape: shape,
+                    title: data.name,
+                    zIndex: 1
+                });
+            }, error: function (error) {
+                alert(error);
+            }
+
+        });
+
+
     }
 
     function walwalMapInit(){
