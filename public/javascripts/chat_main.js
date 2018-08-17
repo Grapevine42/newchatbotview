@@ -178,7 +178,7 @@ $( document ).ready(function() {
             url: "http://localhost:8080/users",
             type: 'get',
             success: function (data) {
-
+            let marker;
                 console.log(data + 'data');
                 $.each(data, function (index, item) {
                     console.log('item.location ' + item.location + ' ' + typeof item.location);
@@ -188,7 +188,7 @@ $( document ).ready(function() {
                 });
                 for (var i = 0; i < beaches.length; i++) {
                     var beach = beaches[i];
-                    var marker = new google.maps.Marker({
+                   marker = new google.maps.Marker({
                         position: {lat: beach[1], lng: beach[2]},
                         map: map,
                         icon: image,
@@ -196,13 +196,14 @@ $( document ).ready(function() {
                         title: beach[0],
                         zIndex: beach[3]
                     });
+                    marker.addListener('click', function () {
+                        console.log('marker clicked')
+                        alert('marker clicked');
+                        initWalDetail();
+                    });
                 }
 
-                marker.addListener('click', function () {
-                    console.log('marker clicked')
-                    alert('marker clicked');
-                   initWalDetail();
-                });
+
             },
             error: function () {
                 alert("error");
@@ -213,27 +214,19 @@ $( document ).ready(function() {
     }
 
 
-    function drwaWalDetail(){
-        $('#walwal').hide();
-        $('#walDetail').show();
-        var str;
+    function drawWalDetail(){
+        var str='';
         $.ajax({
-            url: "http://172.20.10.2:8080/listphoto",
+            url: "http://localhost:8080/listphoto",
             type: 'get',
             success: function (data) {
-                console.log(data + 'data');
-                str='';
+                console.log(data[0].path + 'data');
+                str='<div class="swiper-container"> <div class="swiper-wrapper">';
                 $.each(data, function (index, item) {
-                str += '<div class="w3-display-container mySlides">'
-                    str += '    <img src="http://172.20.10.2:8080/'
-                    str += item.path
-                    str +='"style="width:100%">'
-                    str += '       <div class="w3-display-bottomleft w3-large w3-container w3-padding-16 w3-black">'
-                    str += item.name
-                    str += '</div></div>'
+                str += '<div class="swiper-slide"><image src="http://localhost:8080/'+item.path+'"></div>'
                 });
-
-                $('#walSlider').append(str);
+                str+=' </div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>'
+                $('#walDetail').append(str);
     }
         });
 
@@ -306,11 +299,18 @@ $( document ).ready(function() {
             drawMap();
         }
         else if(data.type== 'imageList'){
-            drawImageSlider();
+            var path='';
+            console.log(getMsg);
+            for(var i=0; i<data.path.length();i++){
+                path+='<div class="swiper-slide"><image src="'+data[i].path+data[i].title+'"></div>';
+            }
+
+            drawImageSlider(path);
         }
-        else if(data.type=='drawDisasterPreview'){
+        else if(data.type=='disasterPreview'){
             drawDisasterPreview(getMsg.location, getMsg.status);
         }
+
         else if(data.type=='option'){
             var optionList = data.option;
             var optionHTML = ""
@@ -340,6 +340,14 @@ $( document ).ready(function() {
             chatbody.append(theirMsg);
 
         }else if(data.type =='newsPreview'){
+            var str='';
+            for(var i=0; i<data.title.length; i++){
+                str += '<a><b>' +
+                    data[i].title +
+                    '</b></a><br>' +
+                    data[i].content+
+                    '<hr>'
+            }
             var theirMsg ="  <li class=\"left clearfix partner_chat\">\n" +
                 "<span class=\"chat-img1 pull-left\">\n" +
                 "<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
@@ -347,10 +355,7 @@ $( document ).ready(function() {
                 "                                <div class=\"chat-body1 clearfix\">\n" +
                 "                                    <div class=\"chat-body-slider\" style=\"margin-top: 10px\">\n" +
                 "                                        <div class=\"selectQuestion\">\n" +
-                "                                            <center><h3>Today's News</h3></center><hr>\n" +
-                "                                            <a><b>Earthquake: 4.4 quake strikes Inland</b></a><br>This information comes from the USGS Earthquake Notification Service and this post was created <hr>\n" +
-                "                                            <a><b>2.6 earthquake shakes near Concord</b></a><br>CONCORD (KRON) - A 2.6 magnitude earthquake has struck near Concord on Tuesday afternoon, according<hr>\n" +
-                "                                            <a><b>Death Toll From Indonesia Earthquake Passes 43</b></a><br>An earthquake expected in Istanbul may claim the lives of 26,000 to 30,000 people...\n" +
+                "                                            <center><h3>Today's News</h3></center><hr>\n" +str+
                 "                                        </div>\n" +
                 "                                    </div>\n" +
                 "                                </div>\n" +
@@ -383,22 +388,41 @@ $( document ).ready(function() {
     });
 
     function drawMap() {
-        var theirMsg = $("    <div class=\"outgoing_msg\">\n" +
-            "            <div class=\"incoming_msg_img\"><img src=\"https://ptetutorials.com/images/user-profile.png\"\n" +
-            "        alt=\"sunil\"></div>\n" +
-            "            <div class=\"received_msg\">\n" +
-            "            <div class=\"received_withd_msg\">\n" +
-            "            <div id= 'map_google' style='width: 300px; height: 300px'>" + "지도를 그릴거에요" +"</div>\n" +
-            "            <span class=\"time_date\"> 11:01 AM    |    June 9</span></div>\n" +
-            "        </div>\n" +
-            "        </div>\n")
-        initMap();
+        var theirMsg = $("<li class=\"left clearfix partner_chat\">\n" +
+            "\t\t\t\t\t\t\t\t\t<span class=\"chat-img1 pull-left\">\n" +
+            "\t\t\t\t\t                  \t<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
+            "                 \t\t\t\t\t </span>\n" +
+            "\n" +
+            "                                <div class=\"chat-body1 clearfix\">\n" +
+            "                                    <div class=\"chat-body-slider\">\n" +
+            "                                        Refuge info\n" +
+            "                                        <div id=\"map_google\">\n" +
+            "                                        </div>\n" +
+            "                                        <table class=\"table chat-map-info\">\n" +
+            "                                            <tr>\n" +
+            "                                                <td>location</td>\n" +
+            "                                                <td>total required time</td>\n" +
+            "                                            </tr>\n" +
+            "                                            <tr>\n" +
+            "                                                <td>601 Union Street,\n" +
+            "                                                    Seattle, WA, USA 98101\n" +
+            "                                                </td>\n" +
+            "                                                <td>00:10</td>\n" +
+            "                                            </tr>\n" +
+            "                                        </table>\n" +
+            "                                        <div>\n" +
+            "                                            <button class=\"btn\">View Detail</button>\n" +
+            "                                        </div>\n" +
+            "                                    </div>\n" +
+            "                                </div>\n" +
+            "                            </li>")
         chatbody.append(theirMsg);
 
     }
 
 
-    function drawImageSlider() {
+    function drawImageSlider(path) {
+
         var theirMsg = $(" <li class=\"left clearfix partner_chat\">\n" +
             "<span class=\"chat-img1 pull-left\">\n" +
             "<img src=\"/images/robot.png\" alt=\"User Avatar\" class=\"img-circle\">\n" +
@@ -409,17 +433,7 @@ $( document ).ready(function() {
             "                                        asddasfasdf\n" +
             "\n" +
             "                                        <div class=\"swiper-container\">\n" +
-            "                                            <div class=\"swiper-wrapper\">\n" +
-            "                                                <div class=\"swiper-slide\"><img src=\"/images/casker-journey.jpg\"></div>\n" +
-            "                                                <div class=\"swiper-slide\"><img src=\"/images/casker-tender.jpg\"></div>\n" +
-            "                                                <div class=\"swiper-slide\"><img src=\"/images/casker-journey.jpg\"></div>\n" +
-            "                                                <div class=\"swiper-slide\">Slide 4</div>\n" +
-            "                                                <div class=\"swiper-slide\">Slide 5</div>\n" +
-            "                                                <div class=\"swiper-slide\">Slide 6</div>\n" +
-            "                                                <div class=\"swiper-slide\">Slide 7</div>\n" +
-            "                                                <div class=\"swiper-slide\">Slide 8</div>\n" +
-            "                                                <div class=\"swiper-slide\">Slide 9</div>\n" +
-            "                                                <div class=\"swiper-slide\">Slide 10</div>\n" +
+            "                                            <div class=\"swiper-wrapper\">\n" +path+
             "                                            </div>\n" +
             "                                            <!-- Add Pagination -->\n" +
             "                                            <div class=\"swiper-pagination\"></div>\n" +
@@ -437,7 +451,7 @@ $( document ).ready(function() {
 
     function drawDisasterPreview(location, status) {
 
-        var statusImoji;
+       var statusImoji;
 
         if(status == 'safe'){
             statusImoji = '😀';
@@ -459,8 +473,8 @@ $( document ).ready(function() {
             "                                        <div class=\"selectQuestion\">\n" +status+
             "                                            Currently, there is noearthquake. Is there any otherinformation you need? (Y/N)<br><hr>\n" +
             "                                           Disaster Info. <br>\n" +
-            "                                            <span style=\"font-size: 50px\">😀</span>\n" +
-            "                                            <h3>"+statusImoji+"</h3><br>\n" +
+            "                                            <span style=\"font-size: 50px\">"+statusImoji+"</span>\n" +
+            "                                         <br>\n" +
             "                                            location." + location+
             "                                        </div>\n" +
             "                                    </div>\n" +
@@ -575,9 +589,22 @@ $( document ).ready(function() {
 
     })
 
+    $("#closeWalDetail").click(function () {
+        $(".walDetail_area").hide();
+        $(".dim-layer").hide();
+
+    })
+
+
+    $("#closeCamera").click(function () {
+        $(".camera_area").hide();
+        $(".dim-layer").hide();
+
+    })
 
     function initWalDetail(){
         $(".walwal_area").hide();
+        drawWalDetail();
         $(".walDetail_area").show();
         var $href = $(this).attr('href');
         layer_popup($href);
