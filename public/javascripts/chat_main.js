@@ -221,13 +221,15 @@ $( document ).ready(function() {
             url: "http://localhost:8080/listphoto",
             type: 'get',
             success: function (data) {
-                console.log(data[0].path + 'data');
+                console.log('draw Detail');
                 str='<div class="swiper-container"> <div class="swiper-wrapper">';
                 $.each(data, function (index, item) {
                 str += '<div class="swiper-slide"><image src="http://localhost:8080/'+item.path+'"></div>'
                 });
                 str+=' </div><div class="swiper-pagination"></div><div class="swiper-button-next"></div><div class="swiper-button-prev"></div></div>'
-                $('#walDetail').append(str);
+                str += '<br><h3>location .</h3><br> '+ data[0].locationName;
+                str += '<br><h3>Time . </h3><br> '+ data[0].time;
+                $('#walDetail').html(str);
     }
         });
 
@@ -485,6 +487,49 @@ $( document ).ready(function() {
 
     }
 
+
+    function settingInit(){
+        var str='<center>\n' +
+            '<div class="profile" style="border-bottom: white solid 2px">\n' +
+            '<br>\n' +
+            '    <div class="row">\n' +
+            '    <img src="/images/robot.png" style="border-radius: 100%;\n' +
+            '    width: 150px;\n' +
+            '    height: 150px;\n' +
+            '    background-color: white;"><br><br></div>\n' +
+            '\n' +
+            '    <div class="row">\n' +
+            '        <h2>정현지님의 Setting Page</h2>\n' +
+            '        <br>\n' +
+            '    </div>\n' +
+            '\n' +
+            '</div>\n' +
+            '    <br><br>\n' +
+            '<div class="row">알림받기\n' +
+            '<label class="switch">\n' +
+            '    <input type="checkbox">\n' +
+            '    <span class="slider round"></span>\n' +
+            '</label><br>\n' +
+            '    본 기능은 회원가입 후 사용가능합니다.\n' +
+            '<br>\n' +
+            '\n' +
+            '</div>\n' +
+            '\n' +
+            '<div class="row">긴급 연락처 등록\n' +
+            '    <label class="switch">\n' +
+            '        <input type="checkbox">\n' +
+            '        <span class="slider round"></span>\n' +
+            '    </label>\n' +
+            '    <br>\n' +
+            '    본 기능은 회원가입 후 사용가능합니다.\n' +
+            '    <br>\n' +
+            '</div>\n' +
+            '\n' +
+            '</center>';
+        $('#setting').html('');
+        $('#setting').append(str);
+    }
+
 //-----------------------walDetail - slider------------------------
     $('#msgInput').keyup(function(e) {
         console.log("hello")
@@ -625,6 +670,15 @@ $( document ).ready(function() {
 
     })
 
+    $("#setting-btn").click(function () {
+        $(".mainSetting").show();
+        settingInit();
+        var $href = $(this).attr('href');
+        layer_popup($href);
+        $(".dim-layer").show();
+
+    })
+
     $("#closeWalWal").click(function () {
         $(".walwal_area").hide();
         $(".dim-layer").hide();
@@ -643,7 +697,11 @@ $( document ).ready(function() {
         $(".dim-layer").hide();
 
     })
+    $("#closeSetting").click(function () {
+        $(".mainSetting").hide();
+        $(".dim-layer").hide();
 
+    })
     function initWalDetail(){
         $(".walwal_area").hide();
         drawWalDetail();
